@@ -25,11 +25,18 @@ class SiteController extends Controller
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
-	public function actionIndex()
-	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+	public function actionIndex(){
+        set_time_limit(500);
+        if( $css = Yii::app()->request->getPost('css') ){
+            //Do some parsing.
+            $cssParser = new CSSParser();
+            $cssParser->load_string($css);
+            $cssParser->parse();
+            $css = $cssParser->parsed;
+        }else{
+            $css = null;
+        }
+		$this->render('index', array('css'=>$css));
 	}
 
 	/**
